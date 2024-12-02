@@ -125,7 +125,7 @@ class SkikoProperties(private val myProject: Project) {
 
     val deployVersion: String
         get() {
-            val main = if (isRelease) planeDeployVersion else "$planeDeployVersion-SNAPSHOT"
+            val main = if (isRelease) planeDeployVersion else "$planeDeployVersion-eldra"
             var metadata = if (buildType == SkiaBuildType.DEBUG) "+debug" else ""
             metadata += if (isWasmBuildWithProfiling) "+profiling" else ""
             return main + metadata

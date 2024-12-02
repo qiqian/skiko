@@ -1,13 +1,13 @@
 pluginManagement {
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
+        maven("https://maven.qq-home.com:8443/repository/maven-central/")
+        maven("https://maven.qq-home.com:8443/repository/gradle-plugin-portal/")
     }
     buildscript {
         repositories {
-            mavenCentral()
-            maven("https://maven.pkg.jetbrains.space/public/p/compose/internal")
-            maven("https://maven.pkg.jetbrains.space/public/p/space/maven")
+            maven("https://maven.qq-home.com:8443/repository/maven-central/")
+            maven("https://maven.qq-home.com:8443/repository/jetbrains-compose-internal/")
+            maven("https://maven.qq-home.com:8443/repository/jetbrains-space/")
         }
         dependencies {
             classpath("org.jetbrains.compose.internal.build-helpers:publishing:0.1.3")
