@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 buildscript {
     repositories {
-        google()
-        mavenCentral()
+        maven("https://maven.qq-home.com:8443/repository/google/")
+        maven("https://maven.qq-home.com:8443/repository/maven-central/")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 
@@ -19,8 +19,8 @@ plugins {
 }
 
 repositories {
-    google()
-    mavenCentral()
+    maven("https://maven.qq-home.com:8443/repository/google/")
+    maven("https://maven.qq-home.com:8443/repository/maven-central/")
     mavenLocal()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }

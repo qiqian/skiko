@@ -2,7 +2,7 @@ pluginManagement {
     repositories {
         maven("https://maven.qq-home.com:8443/repository/maven-central/")
         maven("https://maven.qq-home.com:8443/repository/gradle-plugin-portal/")
-        google()
+        maven("https://maven.qq-home.com:8443/repository/google/")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
     }
 

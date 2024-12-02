@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
+    maven("https://maven.qq-home.com:8443/repository/maven-central/")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     mavenLocal()
 }

@@ -165,7 +165,7 @@ class SkikoProperties(private val myProject: Project) {
             }
 
     val composeRepoUrl: String
-        get() = System.getenv("COMPOSE_REPO_URL") ?: "https://maven.pkg.jetbrains.space/public/p/compose/dev"
+        get() = System.getenv("COMPOSE_REPO_URL") ?: "https://maven.qq-home.com:8443/repository/jetbrains-compose-dev/"
 
     val composeRepoUserName: String
         get() = System.getenv("COMPOSE_REPO_USERNAME") ?: ""
