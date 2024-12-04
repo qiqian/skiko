@@ -21,6 +21,8 @@
 #include <dxgi1_4.h>
 #include <dxgi1_6.h>
 
+#include "integration.h"
+
 const int BuffersCount = 2;
 
 class DirectXDevice
@@ -399,7 +401,9 @@ extern "C"
     {
         DirectXDevice *d3dDevice = fromJavaPointer<DirectXDevice *>(devicePtr);
         GrD3DBackendContext backendContext = d3dDevice->backendContext;
-        return toJavaPointer(GrDirectContext::MakeDirect3D(backendContext).release());
+        sk_sp<GrDirectContext> ctx = GrDirectContext::MakeDirect3D(backendContext);
+        register_skia_ctx(backendContext, ctx);
+        return toJavaPointer(ctx.release());
     }
 
     JNIEXPORT jlong JNICALL Java_org_jetbrains_skiko_redrawer_Direct3DRedrawer_makeDirectXSurface(

@@ -71,6 +71,7 @@ internal class Direct3DRedrawer(
     override fun redrawImmediately() {
         check(!isDisposed) { "Direct3DRedrawer is disposed" }
         inDrawScope {
+            contextHandler.initContext()
             update(System.nanoTime())
             drawAndSwap(withVsync = SkikoProperties.windowsWaitForVsyncOnRedrawImmediately)
         }

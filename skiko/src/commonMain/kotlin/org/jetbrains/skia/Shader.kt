@@ -693,3 +693,7 @@ private external fun _nMakeColorCS(r: Float, g: Float, b: Float, a: Float, color
 @ExternalSymbolName("org_jetbrains_skia_Shader__1nMakeBlend")
 @ModuleImport("./skiko.mjs", "org_jetbrains_skia_Shader__1nMakeBlend")
 private external fun _nMakeBlend(blendMode: Int, dst: NativePointer, src: NativePointer): NativePointer
+
+@ExternalSymbolName("org_jetbrains_skia_Shader__1nMakeBackendRT")
+@ModuleImport("./skiko.mjs", "org_jetbrains_skia_Shader__1nMakeBackendRT")
+private external fun _nMakeBackendRT(width: Int, height: Int, pixel_format: Int): NativePointer

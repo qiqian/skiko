@@ -12,7 +12,7 @@ internal abstract class ContextHandler(
     protected var surface: Surface? = null
     protected var canvas: Canvas? = null
 
-    protected abstract fun initContext(): Boolean
+    abstract fun initContext(): Boolean
     protected abstract fun initCanvas()
 
     protected open fun flush() {
