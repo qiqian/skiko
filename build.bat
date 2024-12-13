@@ -1,0 +1,1 @@
+gradlew :skiko:publishToMavenLocal

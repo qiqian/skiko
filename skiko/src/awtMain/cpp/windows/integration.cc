@@ -1,5 +1,6 @@
 #include "integration.h"
 #include <cassert>
+#include <semaphore>
 
 #include <include/core/SkTileMode.h>
 #include <include/core/SkBitmap.h>
@@ -24,7 +25,16 @@ void register_skia_ctx(GrD3DBackendContext backendCtx, sk_sp<GrDirectContext>& c
     g_backendCtx = backendCtx;
 }
 
-static sk_sp<SkShader> create_texture(int width, int height, int pixel_format)
+struct RtShader {
+    sk_sp<SkImage> image;
+    sk_sp<SkShader> shader;
+};
+struct DoubleBufferRtShader {
+    int index;
+    RtShader rt_shader[2];
+};
+
+static RtShader create_texture(int width, int height, int pixel_format)
 {
     // render  to texture
     D3D12_HEAP_PROPERTIES heapProperties;
@@ -100,17 +110,55 @@ static sk_sp<SkShader> create_texture(int width, int height, int pixel_format)
         SkTileMode::kClamp,
         SkTileMode::kClamp,
         SkSamplingOptions());
-    return skShader;
+    return RtShader{ skImage, skShader };
 }
 
-extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader__1nMakeBackendRT(
+extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader_makeBackendRT(
             JNIEnv *env, jint width, jint height, jint pixel_format)
 {
-    return 0;
+    DoubleBufferRtShader* d = new DoubleBufferRtShader{-1, {
+        create_texture(width, height, pixel_format),
+        create_texture(width, height, pixel_format)
+    } };
+    return toJavaPointer(d);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt__1nMakeBackendRT
+extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt_makeBackendRT
   (JNIEnv* env, jint width, jint height, jint pixel_format)
 {
-    return 0;
+    return org_jetbrains_skia_Shader_makeBackendRT(env, width, height, pixel_format);
+}
+
+extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader_openShader(
+            JNIEnv *env, jlong rtPtr)
+{
+    __try {
+        DoubleBufferRtShader *rt = fromJavaPointer<DoubleBufferRtShader *>(rtPtr);
+
+        rt->index = (rt->index + 1) % 2;
+        RtShader * s = &rt->rt_shader[rt->index];
+
+        // todo : switch to STATE_SHADER_RESOURCE
+
+        return toJavaPointer(s->shader.get());
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER) {
+        auto code = GetExceptionCode();
+        throwJavaRenderExceptionByExceptionCode(env, __FUNCTION__, code);
+    }
+}
+extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt_openShader
+  (JNIEnv* env, jlong rt)
+{
+    return org_jetbrains_skia_Shader_openShader(env, rt);
+}
+
+// transit res to shader_resource
+void eldra_before_render()
+{
+}
+// transit res to draw
+void eldra_after_render()
+{
+    // todo : switch back to render target, release lock
 }

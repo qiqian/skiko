@@ -46,8 +46,11 @@ internal class Direct3DRedrawer(
 
     private val frameDispatcher = FrameDispatcher(MainUIDispatcher) {
         if (layer.isShowing) {
+            contextHandler.initContext()
+            beforeRender(device)
             update(System.nanoTime())
             draw()
+            afterRender(device)
         }
     }
 
@@ -72,8 +75,10 @@ internal class Direct3DRedrawer(
         check(!isDisposed) { "Direct3DRedrawer is disposed" }
         inDrawScope {
             contextHandler.initContext()
+            beforeRender(device)
             update(System.nanoTime())
             drawAndSwap(withVsync = SkikoProperties.windowsWaitForVsyncOnRedrawImmediately)
+            afterRender(device)
         }
     }
 
@@ -139,4 +144,7 @@ internal class Direct3DRedrawer(
     private external fun initFence(device: Long)
     private external fun getAdapterName(adapter: Long): String
     private external fun getAdapterMemorySize(adapter: Long): Long
+
+    private external fun beforeRender(device: Long)
+    private external fun afterRender(device: Long)
 }

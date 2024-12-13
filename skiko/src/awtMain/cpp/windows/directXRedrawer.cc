@@ -518,6 +518,40 @@ extern "C"
         __int64 result = desc.DedicatedVideoMemory;
         return (jlong)result;
     }
+
+    JNIEXPORT void JNICALL Java_org_jetbrains_skiko_redrawer_Direct3DRedrawer_beforeRender(
+            JNIEnv *env, jobject redrawer, jlong devicePtr)
+    {
+        __try
+        {
+            DirectXDevice *d3dDevice = fromJavaPointer<DirectXDevice *>(devicePtr);
+            // 1 value in [Present(1, 0)] enables vblank wait so this is how vertical sync works in DirectX.
+            const UINT64 fenceValue = d3dDevice->fenceValues[d3dDevice->bufferIndex];
+            d3dDevice->swapChain->Present((int)1, 0);
+            d3dDevice->queue->Signal(d3dDevice->fence.get(), fenceValue);
+        }
+        __except(EXCEPTION_EXECUTE_HANDLER) {
+            auto code = GetExceptionCode();
+            throwJavaRenderExceptionByExceptionCode(env, __FUNCTION__, code);
+        }
+    }
+
+    JNIEXPORT void JNICALL Java_org_jetbrains_skiko_redrawer_Direct3DRedrawer_afterRender(
+            JNIEnv *env, jobject redrawer, jlong devicePtr)
+    {
+        __try
+        {
+            DirectXDevice *d3dDevice = fromJavaPointer<DirectXDevice *>(devicePtr);
+            // 1 value in [Present(1, 0)] enables vblank wait so this is how vertical sync works in DirectX.
+            const UINT64 fenceValue = d3dDevice->fenceValues[d3dDevice->bufferIndex];
+            d3dDevice->swapChain->Present((int)1, 0);
+            d3dDevice->queue->Signal(d3dDevice->fence.get(), fenceValue);
+        }
+        __except(EXCEPTION_EXECUTE_HANDLER) {
+            auto code = GetExceptionCode();
+            throwJavaRenderExceptionByExceptionCode(env, __FUNCTION__, code);
+        }
+    }
 }
 
 #endif

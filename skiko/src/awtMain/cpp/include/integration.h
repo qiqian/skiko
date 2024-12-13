@@ -25,10 +25,18 @@
 
 void register_skia_ctx(GrD3DBackendContext backendCtx, sk_sp<GrDirectContext>& ctx);
 
-extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader__1nMakeBackendRT(
-            JNIEnv *env, jint width, jint height, jint pixel_format);
+void eldra_before_render();
+void eldra_after_render();
 
-extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt__1nMakeBackendRT
+extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader_makeBackendRT(
+            JNIEnv *env, jint width, jint height, jint pixel_format);
+extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt_makeBackendRT
   (JNIEnv* env, jint width, jint height, jint pixel_format);
+
+extern "C" JNIEXPORT jlong JNICALL org_jetbrains_skia_Shader_openShader(
+            JNIEnv *env, jlong rt);
+extern "C" JNIEXPORT jlong JNICALL Java_org_jetbrains_skia_ShaderKt_openShader
+  (JNIEnv* env, jlong rt);
+
 
 #endif
